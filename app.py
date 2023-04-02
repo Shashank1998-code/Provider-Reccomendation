@@ -1,8 +1,11 @@
 from flask import Flask, jsonify
+from flask_cors import CORS, cross_origin
 import pandas as pd
 import pickle
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Load the pickled objects
 with open('grouped.pkl', 'rb') as f:
@@ -22,6 +25,7 @@ def recommend_nurses(Zip_Code, top_n=5):
 
 # Define the Flask route
 @app.route('/recommend_nurses/<string:Zip_Code>/<int:top_n>', methods=['GET'])
+@cross_origin()
 def get_recommend_nurses(Zip_Code, top_n):
     # Call the recommend_nurses function
     similar_nurses = recommend_nurses(Zip_Code, top_n)
